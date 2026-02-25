@@ -2,15 +2,6 @@
 
 type GuessItem = { guess: string; strike: number; ball: number };
 
-type ResultItem = {
-  id: number;
-  player_name: string;
-  attempts: number;
-  success_status: "성공" | "실패";
-  duration_ms: number;
-  created_at_text: string;
-};
-
 const app = document.querySelector<HTMLDivElement>("#app");
 
 if (!app) {
@@ -48,20 +39,6 @@ app.innerHTML = `
         <ul id="historyList"></ul>
       </div>
     </section>
-
-    <section class="panel">
-      <h2>최근 저장 결과</h2>
-      <div class="table">
-        <div class="table-row table-head">
-          <span>이름</span>
-          <span>시도</span>
-          <span>성공여부</span>
-          <span>소요(ms)</span>
-          <span>저장시각</span>
-        </div>
-        <div id="results"></div>
-      </div>
-    </section>
   </main>
 `;
 
@@ -72,9 +49,8 @@ const newGameBtn = document.querySelector<HTMLButtonElement>("#newGameBtn");
 const giveUpBtn = document.querySelector<HTMLButtonElement>("#giveUpBtn");
 const statusEl = document.querySelector<HTMLDivElement>("#status");
 const historyList = document.querySelector<HTMLUListElement>("#historyList");
-const resultsEl = document.querySelector<HTMLDivElement>("#results");
 
-if (!playerNameInput || !guessInput || !guessBtn || !newGameBtn || !giveUpBtn || !statusEl || !historyList || !resultsEl) {
+if (!playerNameInput || !guessInput || !guessBtn || !newGameBtn || !giveUpBtn || !statusEl || !historyList) {
   throw new Error("UI elements not found");
 }
 
@@ -83,8 +59,6 @@ let attempts = 0;
 const maxAttempts = 10;
 let history: GuessItem[] = [];
 let isFinished = false;
-let startTime = Date.now();
-let hasSaved = false;
 
 function generateSecret() {
   const digits = Array.from({ length: 10 }, (_, i) => String(i));
@@ -101,8 +75,6 @@ function resetGame() {
   attempts = 0;
   history = [];
   isFinished = false;
-  hasSaved = false;
-  startTime = Date.now();
   statusEl.textContent = "새 게임 시작! 4자리 숫자를 입력하세요.";
   historyList.innerHTML = "";
   guessInput.value = "";
@@ -144,64 +116,13 @@ function renderHistory() {
     .join("");
 }
 
-async function loadResults() {
-  const res = await fetch("/api/results");
-  const data = await res.json();
-  if (!data.ok) {
-    resultsEl.innerHTML = "<div class=\"table-row\">불러오기 실패</div>";
-    return;
-  }
-  const items: ResultItem[] = data.items;
-  resultsEl.innerHTML = items
-    .map(
-      (item) => `
-        <div class="table-row">
-          <span>${item.player_name}</span>
-          <span>${item.attempts}</span>
-          <span>${item.success_status}</span>
-          <span>${item.duration_ms}</span>
-          <span>${item.created_at_text}</span>
-        </div>
-      `
-    )
-    .join("");
-}
-
-async function saveResult(successStatus: "성공" | "실패") {
-  if (hasSaved) return;
-
-  const playerName = playerNameInput.value.trim() || "익명";
-  const durationMs = Date.now() - startTime;
-
-  const res = await fetch("/api/results", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      player_name: playerName,
-      attempts,
-      success_status: successStatus,
-      duration_ms: durationMs,
-    }),
-  });
-
-  const data = await res.json();
-  if (data.ok) {
-    hasSaved = true;
-    await loadResults();
-  } else {
-    statusEl.textContent = "저장 실패: " + (data.error ?? "알 수 없는 오류");
-  }
-}
-
 function finishGame(success: boolean) {
   isFinished = true;
   guessInput.disabled = true;
   guessBtn.disabled = true;
-  const status = success ? "성공" : "실패";
   statusEl.textContent = success
     ? `정답! ${attempts}번 만에 맞췄습니다.`
     : `실패! 정답은 ${secret.join("")} 입니다.`;
-  saveResult(status);
 }
 
 function handleGuess() {
@@ -251,4 +172,3 @@ giveUpBtn.addEventListener("click", () => {
 });
 
 resetGame();
-loadResults();
