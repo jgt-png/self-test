@@ -8,6 +8,7 @@ type ResultItem = {
   attempts: number;
   success_status: "성공" | "실패";
   duration_ms: number;
+  duration_hms?: string;
   created_at_text: string;
 };
 
@@ -56,7 +57,7 @@ app.innerHTML = `
           <span>이름</span>
           <span>시도</span>
           <span>성공여부</span>
-          <span>소요(ms)</span>
+          <span>소요시간</span>
           <span>저장시각</span>
         </div>
         <div id="results"></div>
@@ -159,12 +160,21 @@ async function loadResults() {
           <span>${item.player_name}</span>
           <span>${item.attempts}</span>
           <span>${item.success_status}</span>
-          <span>${item.duration_ms}</span>
+          <span>${item.duration_hms ?? formatDurationHms(item.duration_ms)}</span>
           <span>${item.created_at_text}</span>
         </div>
       `
     )
     .join("");
+}
+
+function formatDurationHms(durationMs: number) {
+  const totalSeconds = Math.floor(durationMs / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${pad(hours)}시 ${pad(minutes)}분 ${pad(seconds)}초`;
 }
 
 async function saveResult(successStatus: "성공" | "실패") {

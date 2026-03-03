@@ -11,9 +11,19 @@ const inMemoryResults: Array<{
   attempts: number;
   success_status: "성공" | "실패";
   duration_ms: number;
+  duration_hms: string;
   created_at_text: string;
 }> = [];
 let nextId = 1;
+
+function formatDurationHms(durationMs: number) {
+  const totalSeconds = Math.floor(durationMs / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
 
 app.get("/api/health", async (_req, res) => {
   res.json({ ok: true });
@@ -47,6 +57,7 @@ app.post("/api/results", async (req, res) => {
     attempts,
     success_status,
     duration_ms,
+    duration_hms: formatDurationHms(duration_ms),
     created_at_text: createdAtText,
   };
   inMemoryResults.push(item);
