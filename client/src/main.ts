@@ -21,7 +21,7 @@ app.innerHTML = `
   <main class="container">
     <section class="hero">
       <h1>숫자 야구 게임</h1>
-      <p>서로 다른 4자리 숫자를 맞춰보세요. 최대 10번 도전!</p>
+      <p>서로 다른 4자리 숫자를 맞춰보세요. 최대 20번 도전!</p>
     </section>
 
     <section class="panel">
@@ -80,7 +80,7 @@ if (!playerNameInput || !guessInput || !guessBtn || !newGameBtn || !giveUpBtn ||
 
 let secret: string[] = [];
 let attempts = 0;
-const maxAttempts = 10;
+const maxAttempts = 20;
 let history: GuessItem[] = [];
 let isFinished = false;
 let startTime = Date.now();
