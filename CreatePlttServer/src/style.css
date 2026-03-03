@@ -348,6 +348,22 @@ button.ghost:hover {
   resize: vertical;
 }
 
+.address-row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.address-row input {
+  flex: 1;
+}
+
+.address-row button {
+  align-self: center;
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
 .span-2 {
   grid-column: span 2;
 }
@@ -358,6 +374,7 @@ button.ghost:hover {
   justify-content: flex-end;
   gap: 12px;
 }
+
 
 .consent-card {
   background: #f3f5ff;
@@ -492,6 +509,10 @@ button:disabled {
 
   .span-2 {
     grid-column: span 1;
+  }
+
+  .address-row {
+    flex-direction: column;
   }
 }
 

@@ -29,11 +29,25 @@
       </label>
       <label class="field span-2">
         <span>병원주소 (필수)</span>
-        <textarea id="hospitalAddress" placeholder="도로명 주소"></textarea>
+        <div class="address-row">
+          <input
+            id="hospitalAddress"
+            type="text"
+            placeholder="도로명 주소"
+            readonly
+          />
+          <button class="secondary" type="button" id="hospitalAddressSearch">
+            주소 찾기
+          </button>
+        </div>
       </label>
       <label class="field span-2">
         <span>병원상세주소</span>
-        <textarea placeholder="층/호수 등"></textarea>
+        <input
+          id="hospitalAddressDetail"
+          type="text"
+          placeholder="층/호수 등"
+        />
       </label>
       <label class="field">
         <span>사업자번호</span>

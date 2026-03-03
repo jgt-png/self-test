@@ -4,6 +4,20 @@ import { consentPage } from "./pageConsent";
 import { step2Page } from "./pageStep2";
 import { step3Page } from "./pageStep3";
 
+declare global {
+  interface Window {
+    kakao?: {
+      Postcode?: new (options: {
+        oncomplete: (data: {
+          address?: string;
+          roadAddress?: string;
+          zonecode?: string;
+        }) => void;
+      }) => { open: () => void };
+    };
+  }
+}
+
 const app = document.querySelector<HTMLDivElement>("#app");
 
 if (!app) {
@@ -49,7 +63,11 @@ const nextStep2 = document.querySelector<HTMLButtonElement>("#nextStep2");
 const backToStep2 = document.querySelector<HTMLButtonElement>("#backToStep2");
 const hospitalName = document.querySelector<HTMLInputElement>("#hospitalName");
 const hospitalNameEn = document.querySelector<HTMLInputElement>("#hospitalNameEn");
-const hospitalAddress = document.querySelector<HTMLTextAreaElement>("#hospitalAddress");
+const hospitalAddress = document.querySelector<HTMLInputElement>("#hospitalAddress");
+const hospitalAddressDetail =
+  document.querySelector<HTMLInputElement>("#hospitalAddressDetail");
+const hospitalAddressSearch =
+  document.querySelector<HTMLButtonElement>("#hospitalAddressSearch");
 const nextStep3 = document.querySelector<HTMLButtonElement>("#nextStep3");
 
 if (
@@ -70,6 +88,8 @@ if (
   !hospitalName ||
   !hospitalNameEn ||
   !hospitalAddress ||
+  !hospitalAddressDetail ||
+  !hospitalAddressSearch ||
   !nextStep3
 ) {
   throw new Error("wizard elements not found");
@@ -145,3 +165,23 @@ function validateHospitalStep() {
 hospitalName.addEventListener("input", validateHospitalStep);
 hospitalNameEn.addEventListener("input", validateHospitalStep);
 hospitalAddress.addEventListener("input", validateHospitalStep);
+
+function openKakaoAddressSearch() {
+  const postcode = window.kakao?.Postcode;
+
+  if (!postcode) {
+    alert("주소 검색 서비스를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.");
+    return;
+  }
+
+  new postcode({
+    oncomplete: (data) => {
+      const address = data.roadAddress?.trim() || data.address?.trim() || "";
+      hospitalAddress.value = address;
+      validateHospitalStep();
+      hospitalAddressDetail.focus();
+    },
+  }).open();
+}
+
+hospitalAddressSearch.addEventListener("click", openKakaoAddressSearch);
