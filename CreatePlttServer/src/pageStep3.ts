@@ -51,15 +51,30 @@
       </label>
       <label class="field">
         <span>사업자번호</span>
-        <input type="text" maxlength="12" placeholder="000-00-00000" />
+        <input
+          id="businessNumber"
+          type="text"
+          maxlength="12"
+          placeholder="000-00-00000"
+        />
       </label>
       <label class="field">
         <span>병원전화번호</span>
-        <input type="text" maxlength="13" placeholder="02-0000-0000" />
+        <input
+          id="hospitalPhone"
+          type="text"
+          maxlength="13"
+          placeholder="02-0000-0000"
+        />
       </label>
       <label class="field">
         <span>병원FAX번호</span>
-        <input type="text" maxlength="13" placeholder="02-0000-0000" />
+        <input
+          id="hospitalFax"
+          type="text"
+          maxlength="13"
+          placeholder="02-0000-0000"
+        />
       </label>
     </div>
 

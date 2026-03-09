@@ -77,6 +77,9 @@ const hospitalAddressDetail =
 const hospitalAddressSearch =
   document.querySelector<HTMLButtonElement>("#hospitalAddressSearch");
 const nextStep3 = document.querySelector<HTMLButtonElement>("#nextStep3");
+const businessNumber = document.querySelector<HTMLInputElement>("#businessNumber");
+const hospitalPhone = document.querySelector<HTMLInputElement>("#hospitalPhone");
+const hospitalFax = document.querySelector<HTMLInputElement>("#hospitalFax");
 const backToStep3 = document.querySelector<HTMLButtonElement>("#backToStep3");
 const nextStep4 = document.querySelector<HTMLButtonElement>("#nextStep4");
 const departmentCode = document.querySelector<HTMLSelectElement>("#departmentCode");
@@ -109,6 +112,9 @@ if (
   !hospitalAddressDetail ||
   !hospitalAddressSearch ||
   !nextStep3 ||
+  !businessNumber ||
+  !hospitalPhone ||
+  !hospitalFax ||
   !backToStep3 ||
   !nextStep4 ||
   !departmentCode ||
@@ -306,6 +312,46 @@ function openKakaoAddressSearch() {
 }
 
 hospitalAddressSearch.addEventListener("click", openKakaoAddressSearch);
+
+function formatBusinessNumber(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  const p1 = digits.slice(0, 3);
+  const p2 = digits.slice(3, 5);
+  const p3 = digits.slice(5, 10);
+  if (digits.length <= 3) return p1;
+  if (digits.length <= 5) return `${p1}-${p2}`;
+  return `${p1}-${p2}-${p3}`;
+}
+
+function formatPhoneNumber(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.startsWith("02")) {
+    if (digits.length <= 5) return `${digits.slice(0, 2)}-${digits.slice(2)}`;
+    if (digits.length <= 9)
+      return `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`;
+    return `${digits.slice(0, 2)}-${digits.slice(2, 6)}-${digits.slice(6)}`;
+  }
+  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  if (digits.length <= 10)
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+}
+
+businessNumber.addEventListener("input", (event) => {
+  const target = event.target as HTMLInputElement;
+  target.value = formatBusinessNumber(target.value);
+});
+
+hospitalPhone.addEventListener("input", (event) => {
+  const target = event.target as HTMLInputElement;
+  target.value = formatPhoneNumber(target.value);
+});
+
+hospitalFax.addEventListener("input", (event) => {
+  const target = event.target as HTMLInputElement;
+  target.value = formatPhoneNumber(target.value);
+});
 
 nextStep3.addEventListener("click", () => {
   if (nextStep3.disabled) return;
