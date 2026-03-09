@@ -11,5 +11,9 @@
   "devDependencies": {
     "typescript": "^5.4.5",
     "vite": "^5.2.8"
+  },
+  "dependencies": {
+    "jquery": "^4.0.0",
+    "jquery-ui-dist": "^1.13.3"
   }
 }

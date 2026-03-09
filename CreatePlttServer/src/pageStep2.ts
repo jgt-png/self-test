@@ -22,7 +22,12 @@
       </label>
       <label class="field">
         <span>대표자 생년월일 (필수)</span>
-        <input id="directorBirth" type="date" />
+        <input
+          id="directorBirth"
+          type="text"
+          inputmode="numeric"
+          placeholder="YYYY-MM-DD"
+        />
       </label>
     </div>
 
