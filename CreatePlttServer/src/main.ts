@@ -58,6 +58,9 @@ const backButton = document.querySelector<HTMLButtonElement>("#backToStart");
 const consentAgree = document.querySelector<HTMLInputElement>("#consentAgree");
 const nextStep = document.querySelector<HTMLButtonElement>("#nextStep");
 const backToConsent = document.querySelector<HTMLButtonElement>("#backToConsent");
+const goStartButtons = Array.from(
+  document.querySelectorAll<HTMLButtonElement>(".goStart")
+);
 const heroStart = document.querySelector<HTMLElement>("#heroStart");
 const wizardPreview = document.querySelector<HTMLElement>("#wizardPreview");
 const wizardForm = document.querySelector<HTMLElement>("#wizardForm");
@@ -125,6 +128,21 @@ if (
 ) {
   throw new Error("wizard elements not found");
 }
+
+const goToHome = () => {
+  wizardForm.classList.add("hidden");
+  wizardStep2.classList.add("hidden");
+  wizardStep3.classList.add("hidden");
+  wizardStep4.classList.add("hidden");
+  wizardStep5.classList.add("hidden");
+  heroStart.classList.remove("hidden");
+  wizardPreview.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+goStartButtons.forEach((button) => {
+  button.addEventListener("click", goToHome);
+});
 
 const showOnlyStep = (step: HTMLElement) => {
   heroStart.classList.add("hidden");
@@ -222,14 +240,7 @@ startButton.addEventListener("click", () => {
 });
 
 backButton.addEventListener("click", () => {
-  wizardForm.classList.add("hidden");
-  wizardStep2.classList.add("hidden");
-  wizardStep3.classList.add("hidden");
-  wizardStep4.classList.add("hidden");
-  wizardStep5.classList.add("hidden");
-  heroStart.classList.remove("hidden");
-  wizardPreview.classList.remove("hidden");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  goToHome();
 });
 
 consentAgree.addEventListener("change", () => {

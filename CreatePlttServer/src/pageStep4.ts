@@ -65,6 +65,7 @@ export const step4Page = `
 
     <div class="wizard-actions">
       <button class="secondary" id="backToStep3">이전 단계</button>
+      <button class="ghost goStart" type="button">처음으로</button>
       <button class="primary" id="nextStep4" disabled>다음 단계</button>
     </div>
   </section>

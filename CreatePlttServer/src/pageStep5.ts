@@ -37,6 +37,7 @@ export const step5Page = `
 
     <div class="wizard-actions">
       <button class="secondary" id="backToStep4">이전 단계</button>
+      <button class="ghost goStart" type="button">처음으로</button>
       <button class="primary" id="nextStep5">다음 단계</button>
     </div>
   </section>
