@@ -374,7 +374,7 @@ button.ghost:hover {
 #staffTable th:nth-child(3),
 #staffTable td:nth-child(3) {
   width: 17%;
-  text-align: left;
+  text-align: center;
 }
 
 #staffTable td:nth-child(2) input {
@@ -389,6 +389,9 @@ button.ghost:hover {
 
 #staffTable td:nth-child(3) button {
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .address-row input {
