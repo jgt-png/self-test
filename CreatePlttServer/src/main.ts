@@ -8,6 +8,7 @@ import { step3Page } from "./pageStep3";
 import { step4Page } from "./pageStep4";
 import { step5Page } from "./pageStep5";
 import { step6Page } from "./pageStep6";
+import { step7Page } from "./pageStep7";
 
 declare global {
   interface Window {
@@ -52,6 +53,7 @@ app.innerHTML = `
     ${step4Page}
     ${step5Page}
     ${step6Page}
+    ${step7Page}
   </main>
 `;
 
@@ -71,6 +73,7 @@ const wizardStep3 = document.querySelector<HTMLElement>("#wizardStep3");
 const wizardStep4 = document.querySelector<HTMLElement>("#wizardStep4");
 const wizardStep5 = document.querySelector<HTMLElement>("#wizardStep5");
 const wizardStep6 = document.querySelector<HTMLElement>("#wizardStep6");
+const wizardStep7 = document.querySelector<HTMLElement>("#wizardStep7");
 const directorName = document.querySelector<HTMLInputElement>("#directorName");
 const directorBirth = document.querySelector<HTMLInputElement>("#directorBirth");
 const nextStep2 = document.querySelector<HTMLButtonElement>("#nextStep2");
@@ -93,6 +96,8 @@ const backToStep4 = document.querySelector<HTMLButtonElement>("#backToStep4");
 const nextStep5 = document.querySelector<HTMLButtonElement>("#nextStep5");
 const backToStep5 = document.querySelector<HTMLButtonElement>("#backToStep5");
 const nextStep6 = document.querySelector<HTMLButtonElement>("#nextStep6");
+const backToStep6 = document.querySelector<HTMLButtonElement>("#backToStep6");
+const nextStep7 = document.querySelector<HTMLButtonElement>("#nextStep7");
 const staffTableBody =
   document.querySelector<HTMLTableSectionElement>("#staffTableBody");
 const addStaffRow = document.querySelector<HTMLButtonElement>("#addStaffRow");
@@ -101,6 +106,12 @@ const departmentTeamTableBody = document.querySelector<HTMLTableSectionElement>(
 );
 const addDepartmentTeamRow = document.querySelector<HTMLButtonElement>(
   "#addDepartmentTeamRow"
+);
+const jobRoleTableBody = document.querySelector<HTMLTableSectionElement>(
+  "#jobRoleTableBody"
+);
+const addJobRoleRow = document.querySelector<HTMLButtonElement>(
+  "#addJobRoleRow"
 );
 
 if (
@@ -117,6 +128,7 @@ if (
   !wizardStep4 ||
   !wizardStep5 ||
   !wizardStep6 ||
+  !wizardStep7 ||
   !directorName ||
   !directorBirth ||
   !nextStep2 ||
@@ -137,10 +149,14 @@ if (
   !nextStep5 ||
   !backToStep5 ||
   !nextStep6 ||
+  !backToStep6 ||
+  !nextStep7 ||
   !staffTableBody ||
   !addStaffRow ||
   !departmentTeamTableBody ||
-  !addDepartmentTeamRow
+  !addDepartmentTeamRow ||
+  !jobRoleTableBody ||
+  !addJobRoleRow
 ) {
   throw new Error("wizard elements not found");
 }
@@ -152,6 +168,7 @@ const goToHome = () => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   heroStart.classList.remove("hidden");
   wizardPreview.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -170,6 +187,7 @@ const showOnlyStep = (step: HTMLElement) => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   step.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
@@ -245,7 +263,7 @@ const skipMode = new URLSearchParams(window.location.search).get("skip");
 const shouldSkipToLast =
   skipMode === "last" || localStorage.getItem("skipWizard") === "last";
 if (shouldSkipToLast) {
-  showOnlyStep(wizardStep6);
+  showOnlyStep(wizardStep7);
 }
 
 startButton.addEventListener("click", () => {
@@ -257,6 +275,7 @@ startButton.addEventListener("click", () => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -276,6 +295,7 @@ nextStep.addEventListener("click", () => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -285,6 +305,7 @@ backToConsent.addEventListener("click", () => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -306,6 +327,7 @@ nextStep2.addEventListener("click", () => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -315,6 +337,7 @@ backToStep2.addEventListener("click", () => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -395,6 +418,7 @@ nextStep3.addEventListener("click", () => {
   wizardStep4.classList.remove("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -403,6 +427,7 @@ backToStep3.addEventListener("click", () => {
   wizardStep3.classList.remove("hidden");
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -413,6 +438,7 @@ nextStep4.addEventListener("click", async () => {
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.remove("hidden");
   wizardStep6.classList.add("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -444,6 +470,7 @@ type HospitalSetupPayload = {
   selectedDepartment: DepartmentRow | null;
   staffPlan: StaffRow[];
   departmentTeams: string[];
+  jobRoles: string[];
 };
 
 const hospitalSetupRepository = {
@@ -531,6 +558,7 @@ function buildHospitalSetupPayload(): HospitalSetupPayload {
     departmentTeams: departmentTeamRows
       .map((row) => row.name.trim())
       .filter(Boolean),
+    jobRoles: jobRoleRows.map((row) => row.name.trim()).filter(Boolean),
   };
 }
 
@@ -658,12 +686,14 @@ nextStep5.addEventListener("click", () => {
   if (nextStep5.disabled) return;
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.remove("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 backToStep5.addEventListener("click", () => {
   wizardStep6.classList.add("hidden");
   wizardStep5.classList.remove("hidden");
+  wizardStep7.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -690,8 +720,79 @@ departmentTeamTableBody.addEventListener("click", (event) => {
   validateStep6();
 });
 
+type JobRoleInputRow = { name: string };
+const jobRoleRows: JobRoleInputRow[] = [
+  { name: "미지정" },
+  { name: "대표원장" },
+  { name: "의사" },
+  { name: "총괄실장" },
+  { name: "실장" },
+  { name: "코디" },
+  { name: "관리" },
+];
+
+function renderJobRoleRows() {
+  jobRoleTableBody.innerHTML = jobRoleRows
+    .map(
+      (row, index) => `
+        <tr data-index="${index}">
+          <td>
+            <input
+              type="text"
+              value="${row.name}"
+              placeholder="예 : 마케팅/운영"
+              ${index === 0 ? "readonly disabled" : ""}
+              data-job-role-input="${index}"
+            />
+          </td>
+          <td>
+            ${
+              index === 0 || jobRoleRows.length === 1
+                ? ""
+                : `<button class="ghost" type="button" data-remove-job-role="${index}">삭제</button>`
+            }
+          </td>
+        </tr>
+      `
+    )
+    .join("");
+}
+
+nextStep6.addEventListener("click", () => {
+  wizardStep6.classList.add("hidden");
+  wizardStep7.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+backToStep6.addEventListener("click", () => {
+  wizardStep7.classList.add("hidden");
+  wizardStep6.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+addJobRoleRow.addEventListener("click", () => {
+  jobRoleRows.push({ name: "" });
+  renderJobRoleRows();
+});
+
+jobRoleTableBody.addEventListener("input", (event) => {
+  const target = event.target as HTMLInputElement;
+  const index = target.getAttribute("data-job-role-input");
+  if (index === null) return;
+  jobRoleRows[Number(index)].name = target.value;
+});
+
+jobRoleTableBody.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  const removeIndex = target.getAttribute("data-remove-job-role");
+  if (removeIndex === null) return;
+  jobRoleRows.splice(Number(removeIndex), 1);
+  renderJobRoleRows();
+});
+
 renderStaffRows();
 validateStaffStep();
 renderDepartmentTeamRows();
 validateStep6();
+renderJobRoleRows();
 

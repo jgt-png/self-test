@@ -437,6 +437,42 @@ button.ghost:hover {
   justify-content: center;
 }
 
+#jobRoleTable {
+  width: 33%;
+  table-layout: fixed;
+  margin-left: 0;
+  min-width: 360px;
+}
+
+#jobRoleTable th:nth-child(1),
+#jobRoleTable td:nth-child(1) {
+  width: 78%;
+}
+
+#jobRoleTable th:nth-child(2),
+#jobRoleTable td:nth-child(2) {
+  width: 22%;
+  text-align: center;
+}
+
+#jobRoleTable td:nth-child(1) input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#jobRoleTable td:nth-child(1) input:disabled {
+  background: #f0f3fb;
+  color: #7c879f;
+  cursor: not-allowed;
+}
+
+#jobRoleTable td:nth-child(2) button {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .table-wrap {
   overflow-x: auto;
 }
