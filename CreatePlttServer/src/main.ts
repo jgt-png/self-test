@@ -7,6 +7,7 @@ import { step2Page } from "./pageStep2";
 import { step3Page } from "./pageStep3";
 import { step4Page } from "./pageStep4";
 import { step5Page } from "./pageStep5";
+import { step6Page } from "./pageStep6";
 
 declare global {
   interface Window {
@@ -50,6 +51,7 @@ app.innerHTML = `
     ${step3Page}
     ${step4Page}
     ${step5Page}
+    ${step6Page}
   </main>
 `;
 
@@ -68,6 +70,7 @@ const wizardStep2 = document.querySelector<HTMLElement>("#wizardStep2");
 const wizardStep3 = document.querySelector<HTMLElement>("#wizardStep3");
 const wizardStep4 = document.querySelector<HTMLElement>("#wizardStep4");
 const wizardStep5 = document.querySelector<HTMLElement>("#wizardStep5");
+const wizardStep6 = document.querySelector<HTMLElement>("#wizardStep6");
 const directorName = document.querySelector<HTMLInputElement>("#directorName");
 const directorBirth = document.querySelector<HTMLInputElement>("#directorBirth");
 const nextStep2 = document.querySelector<HTMLButtonElement>("#nextStep2");
@@ -88,9 +91,17 @@ const nextStep4 = document.querySelector<HTMLButtonElement>("#nextStep4");
 const departmentCode = document.querySelector<HTMLSelectElement>("#departmentCode");
 const backToStep4 = document.querySelector<HTMLButtonElement>("#backToStep4");
 const nextStep5 = document.querySelector<HTMLButtonElement>("#nextStep5");
+const backToStep5 = document.querySelector<HTMLButtonElement>("#backToStep5");
+const nextStep6 = document.querySelector<HTMLButtonElement>("#nextStep6");
 const staffTableBody =
   document.querySelector<HTMLTableSectionElement>("#staffTableBody");
 const addStaffRow = document.querySelector<HTMLButtonElement>("#addStaffRow");
+const departmentTeamTableBody = document.querySelector<HTMLTableSectionElement>(
+  "#departmentTeamTableBody"
+);
+const addDepartmentTeamRow = document.querySelector<HTMLButtonElement>(
+  "#addDepartmentTeamRow"
+);
 
 if (
   !startButton ||
@@ -105,6 +116,7 @@ if (
   !wizardStep3 ||
   !wizardStep4 ||
   !wizardStep5 ||
+  !wizardStep6 ||
   !directorName ||
   !directorBirth ||
   !nextStep2 ||
@@ -123,8 +135,12 @@ if (
   !departmentCode ||
   !backToStep4 ||
   !nextStep5 ||
+  !backToStep5 ||
+  !nextStep6 ||
   !staffTableBody ||
-  !addStaffRow
+  !addStaffRow ||
+  !departmentTeamTableBody ||
+  !addDepartmentTeamRow
 ) {
   throw new Error("wizard elements not found");
 }
@@ -135,6 +151,7 @@ const goToHome = () => {
   wizardStep3.classList.add("hidden");
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   heroStart.classList.remove("hidden");
   wizardPreview.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -151,6 +168,8 @@ const showOnlyStep = (step: HTMLElement) => {
   wizardStep2.classList.add("hidden");
   wizardStep3.classList.add("hidden");
   wizardStep4.classList.add("hidden");
+  wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   step.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
@@ -226,7 +245,7 @@ const skipMode = new URLSearchParams(window.location.search).get("skip");
 const shouldSkipToLast =
   skipMode === "last" || localStorage.getItem("skipWizard") === "last";
 if (shouldSkipToLast) {
-  showOnlyStep(wizardStep5);
+  showOnlyStep(wizardStep6);
 }
 
 startButton.addEventListener("click", () => {
@@ -236,6 +255,8 @@ startButton.addEventListener("click", () => {
   wizardStep2.classList.add("hidden");
   wizardStep3.classList.add("hidden");
   wizardStep4.classList.add("hidden");
+  wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -254,6 +275,7 @@ nextStep.addEventListener("click", () => {
   wizardStep3.classList.add("hidden");
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -262,6 +284,7 @@ backToConsent.addEventListener("click", () => {
   wizardForm.classList.remove("hidden");
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -282,6 +305,7 @@ nextStep2.addEventListener("click", () => {
   wizardStep3.classList.remove("hidden");
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -290,6 +314,7 @@ backToStep2.addEventListener("click", () => {
   wizardStep2.classList.remove("hidden");
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -368,12 +393,16 @@ nextStep3.addEventListener("click", () => {
   if (nextStep3.disabled) return;
   wizardStep3.classList.add("hidden");
   wizardStep4.classList.remove("hidden");
+  wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 backToStep3.addEventListener("click", () => {
   wizardStep4.classList.add("hidden");
   wizardStep3.classList.remove("hidden");
+  wizardStep5.classList.add("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -383,12 +412,14 @@ nextStep4.addEventListener("click", async () => {
   await hospitalSetupRepository.save(payload);
   wizardStep4.classList.add("hidden");
   wizardStep5.classList.remove("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 backToStep4.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep4.classList.remove("hidden");
+  wizardStep6.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -412,6 +443,7 @@ type HospitalSetupPayload = {
   departmentMaster: DepartmentRow[];
   selectedDepartment: DepartmentRow | null;
   staffPlan: StaffRow[];
+  departmentTeams: string[];
 };
 
 const hospitalSetupRepository = {
@@ -496,6 +528,9 @@ function buildHospitalSetupPayload(): HospitalSetupPayload {
       role: row.role.trim(),
       count: Number(row.count || 0),
     })),
+    departmentTeams: departmentTeamRows
+      .map((row) => row.name.trim())
+      .filter(Boolean),
   };
 }
 
@@ -576,10 +611,87 @@ function validateStaffStep() {
   nextStep5.disabled = !(medicalCount > 0);
 }
 
+type DepartmentTeamInputRow = { name: string };
+const departmentTeamRows: DepartmentTeamInputRow[] = [
+  { name: "미지정" },
+  { name: "진료팀" },
+  { name: "상담팀" },
+  { name: "코디팀" },
+  { name: "관리팀" },
+  { name: "간호팀" },
+  { name: "마케팅팀" },
+  { name: "운영팀" },
+];
+
+function renderDepartmentTeamRows() {
+  departmentTeamTableBody.innerHTML = departmentTeamRows
+    .map(
+      (row, index) => `
+        <tr data-index="${index}">
+          <td>
+            <input
+              type="text"
+              value="${row.name}"
+              placeholder="예 : 진료팀/운영팀"
+              ${index === 0 ? "readonly disabled" : ""}
+              data-department-team-input="${index}"
+            />
+          </td>
+          <td>
+            ${
+              index === 0 || departmentTeamRows.length === 1
+                ? ""
+                : `<button class="ghost" type="button" data-remove-department-team="${index}">삭제</button>`
+            }
+          </td>
+        </tr>
+      `
+    )
+    .join("");
+}
+
+function validateStep6() {
+  nextStep6.disabled = departmentTeamRows.length === 0;
+}
+
+nextStep5.addEventListener("click", () => {
+  if (nextStep5.disabled) return;
+  wizardStep5.classList.add("hidden");
+  wizardStep6.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+backToStep5.addEventListener("click", () => {
+  wizardStep6.classList.add("hidden");
+  wizardStep5.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+addDepartmentTeamRow.addEventListener("click", () => {
+  departmentTeamRows.push({ name: "" });
+  renderDepartmentTeamRows();
+  validateStep6();
+});
+
+departmentTeamTableBody.addEventListener("input", (event) => {
+  const target = event.target as HTMLInputElement;
+  const index = target.getAttribute("data-department-team-input");
+  if (index === null) return;
+  departmentTeamRows[Number(index)].name = target.value;
+  validateStep6();
+});
+
+departmentTeamTableBody.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  const removeIndex = target.getAttribute("data-remove-department-team");
+  if (removeIndex === null) return;
+  departmentTeamRows.splice(Number(removeIndex), 1);
+  renderDepartmentTeamRows();
+  validateStep6();
+});
+
 renderStaffRows();
 validateStaffStep();
-
-
-
-
+renderDepartmentTeamRows();
+validateStep6();
 
