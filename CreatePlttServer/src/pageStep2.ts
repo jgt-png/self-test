@@ -26,6 +26,7 @@
           id="directorBirth"
           type="text"
           inputmode="numeric"
+          autocomplete="off"
           placeholder="YYYY-MM-DD"
         />
       </label>

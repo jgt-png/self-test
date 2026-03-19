@@ -338,7 +338,28 @@ function validateDirectorStep() {
   nextStep2.disabled = !(nameValid && birthValid);
 }
 
+function formatBirthDate(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 8);
+  if (digits.length <= 4) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+}
+
 directorName.addEventListener("input", validateDirectorStep);
+directorBirth.addEventListener("input", (event) => {
+  const target = event.target as HTMLInputElement;
+  target.value = formatBirthDate(target.value);
+  validateDirectorStep();
+});
+directorBirth.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  validateDirectorStep();
+  const datepicker = ($ as any)(directorBirth);
+  if (datepicker?.datepicker) {
+    datepicker.datepicker("hide");
+  }
+});
 directorBirth.addEventListener("change", validateDirectorStep);
 
 nextStep2.addEventListener("click", () => {
