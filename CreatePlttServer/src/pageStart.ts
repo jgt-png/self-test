@@ -29,7 +29,7 @@
       <div class="progress">
         <div class="progress-text">
           <span>진행률</span>
-          <strong>0 / 24</strong>
+          <strong>0 / 8</strong>
         </div>
         <div class="progress-bar"><span style="width: 0%"></span></div>
       </div>

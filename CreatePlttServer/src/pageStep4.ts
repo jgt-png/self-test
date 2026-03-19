@@ -11,7 +11,7 @@ export const step4Page = `
       </div>
       <div class="wizard-progress">
         <span>진행률</span>
-        <strong>4 / 24</strong>
+        <strong>4 / 8</strong>
       </div>
     </div>
 

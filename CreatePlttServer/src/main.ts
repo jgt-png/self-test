@@ -9,6 +9,7 @@ import { step4Page } from "./pageStep4";
 import { step5Page } from "./pageStep5";
 import { step6Page } from "./pageStep6";
 import { step7Page } from "./pageStep7";
+import { step8Page } from "./pageStep8";
 
 declare global {
   interface Window {
@@ -54,6 +55,7 @@ app.innerHTML = `
     ${step5Page}
     ${step6Page}
     ${step7Page}
+    ${step8Page}
   </main>
 `;
 
@@ -74,6 +76,7 @@ const wizardStep4 = document.querySelector<HTMLElement>("#wizardStep4");
 const wizardStep5 = document.querySelector<HTMLElement>("#wizardStep5");
 const wizardStep6 = document.querySelector<HTMLElement>("#wizardStep6");
 const wizardStep7 = document.querySelector<HTMLElement>("#wizardStep7");
+const wizardStep8 = document.querySelector<HTMLElement>("#wizardStep8");
 const directorName = document.querySelector<HTMLInputElement>("#directorName");
 const directorBirth = document.querySelector<HTMLInputElement>("#directorBirth");
 const nextStep2 = document.querySelector<HTMLButtonElement>("#nextStep2");
@@ -98,6 +101,8 @@ const backToStep5 = document.querySelector<HTMLButtonElement>("#backToStep5");
 const nextStep6 = document.querySelector<HTMLButtonElement>("#nextStep6");
 const backToStep6 = document.querySelector<HTMLButtonElement>("#backToStep6");
 const nextStep7 = document.querySelector<HTMLButtonElement>("#nextStep7");
+const backToStep7 = document.querySelector<HTMLButtonElement>("#backToStep7");
+const nextStep8 = document.querySelector<HTMLButtonElement>("#nextStep8");
 const staffTableBody =
   document.querySelector<HTMLTableSectionElement>("#staffTableBody");
 const addStaffRow = document.querySelector<HTMLButtonElement>("#addStaffRow");
@@ -112,6 +117,12 @@ const jobRoleTableBody = document.querySelector<HTMLTableSectionElement>(
 );
 const addJobRoleRow = document.querySelector<HTMLButtonElement>(
   "#addJobRoleRow"
+);
+const accountInviteTableBody = document.querySelector<HTMLTableSectionElement>(
+  "#accountInviteTableBody"
+);
+const addAccountInviteRow = document.querySelector<HTMLButtonElement>(
+  "#addAccountInviteRow"
 );
 
 if (
@@ -129,6 +140,7 @@ if (
   !wizardStep5 ||
   !wizardStep6 ||
   !wizardStep7 ||
+  !wizardStep8 ||
   !directorName ||
   !directorBirth ||
   !nextStep2 ||
@@ -151,12 +163,16 @@ if (
   !nextStep6 ||
   !backToStep6 ||
   !nextStep7 ||
+  !backToStep7 ||
+  !nextStep8 ||
   !staffTableBody ||
   !addStaffRow ||
   !departmentTeamTableBody ||
   !addDepartmentTeamRow ||
   !jobRoleTableBody ||
-  !addJobRoleRow
+  !addJobRoleRow ||
+  !accountInviteTableBody ||
+  !addAccountInviteRow
 ) {
   throw new Error("wizard elements not found");
 }
@@ -169,6 +185,7 @@ const goToHome = () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   heroStart.classList.remove("hidden");
   wizardPreview.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -188,6 +205,7 @@ const showOnlyStep = (step: HTMLElement) => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   step.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
@@ -263,7 +281,7 @@ const skipMode = new URLSearchParams(window.location.search).get("skip");
 const shouldSkipToLast =
   skipMode === "last" || localStorage.getItem("skipWizard") === "last";
 if (shouldSkipToLast) {
-  showOnlyStep(wizardStep7);
+  showOnlyStep(wizardStep8);
 }
 
 startButton.addEventListener("click", () => {
@@ -276,6 +294,7 @@ startButton.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -296,6 +315,7 @@ nextStep.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -306,6 +326,7 @@ backToConsent.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -328,6 +349,7 @@ nextStep2.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -338,6 +360,7 @@ backToStep2.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -419,6 +442,7 @@ nextStep3.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -428,6 +452,7 @@ backToStep3.addEventListener("click", () => {
   wizardStep5.classList.add("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -439,6 +464,7 @@ nextStep4.addEventListener("click", async () => {
   wizardStep5.classList.remove("hidden");
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.add("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -471,6 +497,7 @@ type HospitalSetupPayload = {
   staffPlan: StaffRow[];
   departmentTeams: string[];
   jobRoles: string[];
+  inviteAccounts: InviteAccountRow[];
 };
 
 const hospitalSetupRepository = {
@@ -559,6 +586,11 @@ function buildHospitalSetupPayload(): HospitalSetupPayload {
       .map((row) => row.name.trim())
       .filter(Boolean),
     jobRoles: jobRoleRows.map((row) => row.name.trim()).filter(Boolean),
+    inviteAccounts: inviteAccountRows.map((row) => ({
+      email: row.email.trim(),
+      department: row.department.trim(),
+      jobRole: row.jobRole.trim(),
+    })),
   };
 }
 
@@ -700,6 +732,7 @@ backToStep5.addEventListener("click", () => {
 addDepartmentTeamRow.addEventListener("click", () => {
   departmentTeamRows.push({ name: "" });
   renderDepartmentTeamRows();
+  renderInviteAccountRows();
   validateStep6();
 });
 
@@ -708,6 +741,7 @@ departmentTeamTableBody.addEventListener("input", (event) => {
   const index = target.getAttribute("data-department-team-input");
   if (index === null) return;
   departmentTeamRows[Number(index)].name = target.value;
+  renderInviteAccountRows();
   validateStep6();
 });
 
@@ -717,6 +751,7 @@ departmentTeamTableBody.addEventListener("click", (event) => {
   if (removeIndex === null) return;
   departmentTeamRows.splice(Number(removeIndex), 1);
   renderDepartmentTeamRows();
+  renderInviteAccountRows();
   validateStep6();
 });
 
@@ -761,18 +796,21 @@ function renderJobRoleRows() {
 nextStep6.addEventListener("click", () => {
   wizardStep6.classList.add("hidden");
   wizardStep7.classList.remove("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 backToStep6.addEventListener("click", () => {
   wizardStep7.classList.add("hidden");
   wizardStep6.classList.remove("hidden");
+  wizardStep8.classList.add("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 addJobRoleRow.addEventListener("click", () => {
   jobRoleRows.push({ name: "" });
   renderJobRoleRows();
+  renderInviteAccountRows();
 });
 
 jobRoleTableBody.addEventListener("input", (event) => {
@@ -780,6 +818,7 @@ jobRoleTableBody.addEventListener("input", (event) => {
   const index = target.getAttribute("data-job-role-input");
   if (index === null) return;
   jobRoleRows[Number(index)].name = target.value;
+  renderInviteAccountRows();
 });
 
 jobRoleTableBody.addEventListener("click", (event) => {
@@ -788,6 +827,147 @@ jobRoleTableBody.addEventListener("click", (event) => {
   if (removeIndex === null) return;
   jobRoleRows.splice(Number(removeIndex), 1);
   renderJobRoleRows();
+  renderInviteAccountRows();
+});
+
+type InviteAccountRow = {
+  email: string;
+  department: string;
+  jobRole: string;
+};
+
+const inviteAccountRows: InviteAccountRow[] = [
+  { email: "", department: departmentTeamRows[0]?.name ?? "", jobRole: jobRoleRows[0]?.name ?? "" },
+];
+
+function getDepartmentTeamOptions() {
+  return departmentTeamRows
+    .map((row) => row.name.trim())
+    .filter(Boolean)
+    .map((name) => `<option value="${name}">${name}</option>`)
+    .join("");
+}
+
+function getJobRoleOptions() {
+  return jobRoleRows
+    .map((row) => row.name.trim())
+    .filter(Boolean)
+    .map((name) => `<option value="${name}">${name}</option>`)
+    .join("");
+}
+
+function renderInviteAccountRows() {
+  const departmentOptions = getDepartmentTeamOptions();
+  const jobRoleOptions = getJobRoleOptions();
+
+  accountInviteTableBody.innerHTML = inviteAccountRows
+    .map(
+      (row, index) => `
+        <tr data-index="${index}">
+          <td>
+            <input
+              type="email"
+              value="${row.email}"
+              placeholder="예 : example@hospital.com"
+              data-account-email-input="${index}"
+            />
+          </td>
+          <td>
+            <select data-account-department-select="${index}">
+              ${departmentOptions}
+            </select>
+          </td>
+          <td>
+            <select data-account-job-role-select="${index}">
+              ${jobRoleOptions}
+            </select>
+          </td>
+          <td>
+            ${
+              index === 0 || inviteAccountRows.length === 1
+                ? ""
+                : `<button class="ghost" type="button" data-remove-account-invite="${index}">삭제</button>`
+            }
+          </td>
+        </tr>
+      `
+    )
+    .join("");
+
+  inviteAccountRows.forEach((row, index) => {
+    const departmentSelect = accountInviteTableBody.querySelector<HTMLSelectElement>(
+      `[data-account-department-select="${index}"]`
+    );
+    const jobRoleSelect = accountInviteTableBody.querySelector<HTMLSelectElement>(
+      `[data-account-job-role-select="${index}"]`
+    );
+
+    if (departmentSelect) {
+      departmentSelect.value =
+        departmentTeamRows.some((team) => team.name === row.department)
+          ? row.department
+          : departmentTeamRows[0]?.name ?? "";
+      row.department = departmentSelect.value;
+    }
+
+    if (jobRoleSelect) {
+      jobRoleSelect.value = jobRoleRows.some((job) => job.name === row.jobRole)
+        ? row.jobRole
+        : jobRoleRows[0]?.name ?? "";
+      row.jobRole = jobRoleSelect.value;
+    }
+  });
+}
+
+nextStep7.addEventListener("click", () => {
+  wizardStep7.classList.add("hidden");
+  renderInviteAccountRows();
+  wizardStep8.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+backToStep7.addEventListener("click", () => {
+  wizardStep8.classList.add("hidden");
+  wizardStep7.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+addAccountInviteRow.addEventListener("click", () => {
+  inviteAccountRows.push({
+    email: "",
+    department: departmentTeamRows[0]?.name ?? "",
+    jobRole: jobRoleRows[0]?.name ?? "",
+  });
+  renderInviteAccountRows();
+});
+
+accountInviteTableBody.addEventListener("input", (event) => {
+  const target = event.target as HTMLInputElement;
+  const index = target.getAttribute("data-account-email-input");
+  if (index === null) return;
+  inviteAccountRows[Number(index)].email = target.value;
+});
+
+accountInviteTableBody.addEventListener("change", (event) => {
+  const target = event.target as HTMLSelectElement;
+  const departmentIndex = target.getAttribute("data-account-department-select");
+  const jobRoleIndex = target.getAttribute("data-account-job-role-select");
+
+  if (departmentIndex !== null) {
+    inviteAccountRows[Number(departmentIndex)].department = target.value;
+  }
+
+  if (jobRoleIndex !== null) {
+    inviteAccountRows[Number(jobRoleIndex)].jobRole = target.value;
+  }
+});
+
+accountInviteTableBody.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  const removeIndex = target.getAttribute("data-remove-account-invite");
+  if (removeIndex === null) return;
+  inviteAccountRows.splice(Number(removeIndex), 1);
+  renderInviteAccountRows();
 });
 
 renderStaffRows();
@@ -795,4 +975,5 @@ validateStaffStep();
 renderDepartmentTeamRows();
 validateStep6();
 renderJobRoleRows();
+renderInviteAccountRows();
 

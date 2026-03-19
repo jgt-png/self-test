@@ -7,7 +7,7 @@
       </div>
       <div class="wizard-progress">
         <span>진행률</span>
-        <strong>1 / 24</strong>
+        <strong>1 / 8</strong>
       </div>
     </div>
 

@@ -473,6 +473,44 @@ button.ghost:hover {
   justify-content: center;
 }
 
+#accountInviteTable {
+  width: 100%;
+  table-layout: fixed;
+  min-width: 760px;
+}
+
+#accountInviteTable th:nth-child(1),
+#accountInviteTable td:nth-child(1) {
+  width: 34%;
+}
+
+#accountInviteTable th:nth-child(2),
+#accountInviteTable td:nth-child(2),
+#accountInviteTable th:nth-child(3),
+#accountInviteTable td:nth-child(3) {
+  width: 24%;
+}
+
+#accountInviteTable th:nth-child(4),
+#accountInviteTable td:nth-child(4) {
+  width: 18%;
+  text-align: center;
+}
+
+#accountInviteTable td:nth-child(1) input,
+#accountInviteTable td:nth-child(2) select,
+#accountInviteTable td:nth-child(3) select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#accountInviteTable td:nth-child(4) button {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .table-wrap {
   overflow-x: auto;
 }
