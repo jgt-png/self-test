@@ -45,6 +45,11 @@ app.innerHTML = `
           <h1>운영 정보를 입력해 초기 환경을 구성합니다.</h1>
         </div>
       </div>
+      <div class="draft-actions">
+        <input type="file" id="draftFileInput" accept=".json" style="display:none" />
+        <button class="secondary" type="button" id="loadDraftBtn">불러오기</button>
+        <button class="secondary" type="button" id="saveDraftBtn">임시저장</button>
+      </div>
     </header>
 
     ${startPage}
@@ -408,6 +413,8 @@ function openKakaoAddressSearch() {
     oncomplete: (data) => {
       const address = data.roadAddress?.trim() || data.address?.trim() || "";
       hospitalAddress.value = address;
+      const zipCodeEl = document.querySelector<HTMLInputElement>("#hospitalZipCode");
+      if (zipCodeEl) zipCodeEl.value = data.zonecode?.trim() || "";
       validateHospitalStep();
       hospitalAddressDetail.focus();
     },
@@ -504,13 +511,14 @@ departmentCode.addEventListener("change", validateStep4);
 
 type HospitalSetupPayload = {
   director: {
-    name: string;
-    birthDate: string;
+    hospitalChiefName: string;
+    hospitalChiefDayOfBirth: string;
   };
   hospital: {
     name: string;
     nameEn: string;
     address: string;
+    zipCode?: string;
     addressDetail?: string;
   };
   departmentMaster: DepartmentRow[];
@@ -588,13 +596,14 @@ function getSelectedDepartment(): DepartmentRow | null {
 function buildHospitalSetupPayload(): HospitalSetupPayload {
   return {
     director: {
-      name: directorName.value.trim(),
-      birthDate: directorBirth.value.trim(),
+      hospitalChiefName: directorName.value.trim(),
+      hospitalChiefDayOfBirth: directorBirth.value.trim(),
     },
     hospital: {
       name: hospitalName.value.trim(),
       nameEn: hospitalNameEn.value.trim(),
       address: hospitalAddress.value.trim(),
+      zipCode: (document.querySelector<HTMLInputElement>("#hospitalZipCode")?.value ?? "").trim() || undefined,
       addressDetail: hospitalAddressDetail.value.trim() || undefined,
     },
     departmentMaster: [...departmentMaster],
@@ -997,4 +1006,168 @@ renderDepartmentTeamRows();
 validateStep6();
 renderJobRoleRows();
 renderInviteAccountRows();
+
+// --- 임시저장 / 불러오기 ---
+
+type DraftStep =
+  | "consent"
+  | "step2"
+  | "step3"
+  | "step4"
+  | "step5"
+  | "step6"
+  | "step7"
+  | "step8";
+
+type DraftData = {
+  lastStep: DraftStep;
+  director: { hospitalChiefName: string; hospitalChiefDayOfBirth: string };
+  hospital: {
+    medicalInstNo: string;
+    name: string;
+    nameEn: string;
+    address: string;
+    zipCode: string;
+    addressDetail: string;
+    businessRegNo: string;
+    telNo: string;
+    faxNo: string;
+  };
+  subject: string;
+  staffRows: StaffRow[];
+  departmentTeamRows: DepartmentTeamInputRow[];
+  jobRoleRows: JobRoleInputRow[];
+  inviteAccountRows: InviteAccountRow[];
+};
+
+function getCurrentStep(): DraftStep {
+  if (!wizardStep8.classList.contains("hidden")) return "step8";
+  if (!wizardStep7.classList.contains("hidden")) return "step7";
+  if (!wizardStep6.classList.contains("hidden")) return "step6";
+  if (!wizardStep5.classList.contains("hidden")) return "step5";
+  if (!wizardStep4.classList.contains("hidden")) return "step4";
+  if (!wizardStep3.classList.contains("hidden")) return "step3";
+  if (!wizardStep2.classList.contains("hidden")) return "step2";
+  if (!wizardForm.classList.contains("hidden")) return "consent";
+  // 홈 화면일 경우 데이터 기반으로 마지막 단계 추론
+  if (inviteAccountRows.some((r) => r.email.trim())) return "step8";
+  if (staffRows[0]?.count > 0) return "step5";
+  if (departmentCode.value) return "step4";
+  if (hospitalName.value.trim()) return "step3";
+  if (directorName.value.trim()) return "step2";
+  return "consent";
+}
+
+function buildDraft(): DraftData {
+  return {
+    lastStep: getCurrentStep(),
+    director: {
+      hospitalChiefName: directorName.value.trim(),
+      hospitalChiefDayOfBirth: directorBirth.value.trim(),
+    },
+    hospital: {
+      medicalInstNo: (document.querySelector<HTMLInputElement>("#caregiverNumber")?.value ?? "").trim(),
+      name: hospitalName.value.trim(),
+      nameEn: hospitalNameEn.value.trim(),
+      address: hospitalAddress.value.trim(),
+      zipCode: (document.querySelector<HTMLInputElement>("#hospitalZipCode")?.value ?? "").trim(),
+      addressDetail: hospitalAddressDetail.value.trim(),
+      businessRegNo: businessNumber.value.trim(),
+      telNo: hospitalPhone.value.trim(),
+      faxNo: hospitalFax.value.trim(),
+    },
+    subject: departmentCode.value,
+    staffRows: staffRows.map((r) => ({ ...r })),
+    departmentTeamRows: departmentTeamRows.map((r) => ({ ...r })),
+    jobRoleRows: jobRoleRows.map((r) => ({ ...r })),
+    inviteAccountRows: inviteAccountRows.map((r) => ({ ...r })),
+  };
+}
+
+const stepElementMap: Record<DraftStep, HTMLElement> = {
+  consent: wizardForm,
+  step2: wizardStep2,
+  step3: wizardStep3,
+  step4: wizardStep4,
+  step5: wizardStep5,
+  step6: wizardStep6,
+  step7: wizardStep7,
+  step8: wizardStep8,
+};
+
+function applyDraft(draft: DraftData) {
+  directorName.value = draft.director.hospitalChiefName;
+  directorBirth.value = draft.director.hospitalChiefDayOfBirth;
+
+  const caregiverEl = document.querySelector<HTMLInputElement>("#caregiverNumber");
+  if (caregiverEl) caregiverEl.value = draft.hospital.medicalInstNo ?? "";
+
+  hospitalName.value = draft.hospital.name;
+  hospitalNameEn.value = draft.hospital.nameEn;
+  hospitalAddress.value = draft.hospital.address;
+  const zipCodeEl = document.querySelector<HTMLInputElement>("#hospitalZipCode");
+  if (zipCodeEl) zipCodeEl.value = draft.hospital.zipCode ?? "";
+  hospitalAddressDetail.value = draft.hospital.addressDetail;
+  businessNumber.value = draft.hospital.businessRegNo;
+  hospitalPhone.value = draft.hospital.telNo;
+  hospitalFax.value = draft.hospital.faxNo;
+
+  departmentCode.value = draft.subject;
+
+  staffRows.length = 0;
+  draft.staffRows.forEach((r) => staffRows.push({ ...r }));
+
+  departmentTeamRows.length = 0;
+  draft.departmentTeamRows.forEach((r) => departmentTeamRows.push({ ...r }));
+
+  jobRoleRows.length = 0;
+  draft.jobRoleRows.forEach((r) => jobRoleRows.push({ ...r }));
+
+  inviteAccountRows.length = 0;
+  draft.inviteAccountRows.forEach((r) => inviteAccountRows.push({ ...r }));
+
+  renderStaffRows();
+  validateStaffStep();
+  renderDepartmentTeamRows();
+  validateStep6();
+  renderJobRoleRows();
+  renderInviteAccountRows();
+  validateDirectorStep();
+  validateHospitalStep();
+  validateStep4();
+
+  const targetStep = draft.lastStep ?? "consent";
+  showOnlyStep(stepElementMap[targetStep]);
+}
+
+document.querySelector<HTMLButtonElement>("#saveDraftBtn")?.addEventListener("click", () => {
+  const json = JSON.stringify(buildDraft(), null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "hospital-setup-draft.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.querySelector<HTMLButtonElement>("#loadDraftBtn")?.addEventListener("click", () => {
+  document.querySelector<HTMLInputElement>("#draftFileInput")?.click();
+});
+
+document.querySelector<HTMLInputElement>("#draftFileInput")?.addEventListener("change", (event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const draft = JSON.parse(e.target?.result as string) as DraftData;
+      applyDraft(draft);
+    } catch {
+      alert("유효하지 않은 파일입니다.");
+    }
+  };
+  reader.readAsText(file);
+  (event.target as HTMLInputElement).value = "";
+});
 

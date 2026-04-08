@@ -17,7 +17,7 @@
     <div class="form-grid">
       <label class="field">
         <span>요양기관기호</span>
-        <input type="text" maxlength="8" placeholder="예: 12345678" />
+        <input id="caregiverNumber" type="text" maxlength="8" placeholder="예: 12345678" />
       </label>
       <label class="field">
         <span>병원명 (필수)</span>
@@ -40,6 +40,7 @@
             주소 찾기
           </button>
         </div>
+        <input type="hidden" id="hospitalZipCode" />
       </label>
       <label class="field span-2">
         <span>병원상세주소</span>
